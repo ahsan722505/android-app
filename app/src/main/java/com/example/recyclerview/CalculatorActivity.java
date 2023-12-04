@@ -39,6 +39,15 @@ public class CalculatorActivity extends AppCompatActivity {
         }
 
         Button addContactsButton = findViewById(R.id.addContactsButton);
+        Button getWeatherButton = findViewById(R.id.getWeatherButton);
+
+        getWeatherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalculatorActivity.this, WeatherActivity.class);
+                startActivity(intent);
+            }
+        });
 
         addContactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +56,7 @@ public class CalculatorActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         Button buttonAdd = findViewById(R.id.buttonAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
