@@ -1,10 +1,13 @@
 package com.example.recyclerview;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,16 +18,22 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
    ArrayList<ContactModel> arrContacts = new ArrayList<>();
     RecyclerContactAdapter adapter;
     RecyclerView recyclerView;
+    private ContactViewModel contactViewModel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         recyclerView= findViewById(R.id.recyclerContact);
+        contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
+
+        recyclerView= findViewById(R.id.recyclerContact);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -50,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
                         if(name.equals("") || number.equals("")){
                             Toast.makeText(MainActivity.this,"Make sure both fields are filled",Toast.LENGTH_SHORT).show();
                         }else{
+                            // Insert into database
+                            ContactEntity contactEntity = new ContactEntity();
+                            contactEntity.img = R.mipmap.ic_launcher;
+                            contactEntity.name = name;
+                            contactEntity.number = number;
+                            contactViewModel.insertContact(contactEntity);
                             arrContacts.add(new ContactModel(R.mipmap.ic_launcher,name,number));
                             adapter.notifyItemInserted(arrContacts.size()-1);
                             recyclerView.scrollToPosition(arrContacts.size()-1);
@@ -60,14 +75,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        arrContacts.add(new ContactModel(R.mipmap.ic_launcher,"Ahsan","03248823329"));
-        arrContacts.add(new ContactModel(R.mipmap.ic_launcher,"Ubuntu","94847374734"));
-        arrContacts.add(new ContactModel(R.mipmap.ic_launcher,"Walter","2398748397433"));
-
 
          adapter = new RecyclerContactAdapter(this,arrContacts);
 
         recyclerView.setAdapter(adapter);
 
+        loadContactsFromDatabase();
+
     }
+
+    private void loadContactsFromDatabase() {
+        contactViewModel.getContactsLiveData().observe(this, contactEntities -> {
+            arrContacts.clear();
+            for (ContactEntity contactEntity : contactEntities) {
+                arrContacts.add(new ContactModel(contactEntity.img, contactEntity.name, contactEntity.number));
+            }
+            adapter.notifyDataSetChanged();
+        });
+    }
+
+
+
 }
