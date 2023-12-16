@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- activity_weather.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/temperatureTextView"
-        android:layout_width="wrap_content"
+    tools:context=".WeatherActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Temperature: "
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"
-        />
-</LinearLayout>
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/cityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter City"/>
+
+            <Button
+                android:id="@+id/fetchWeatherButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Fetch Weather"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/temperatureTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
